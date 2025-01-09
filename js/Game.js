@@ -79,9 +79,9 @@ class Game {
   watchStats() {
     console.log("\n%c--- Statistiques des joueurs ---", "color: blue; font-size: 14px;");
     this.players.forEach(player => {
-      let color = "white"; 
+      let color = "black"; 
       if (player.status === "loser") color = "red";
-      else if (player.status === "winner") color = "green";
+      else if (player.status === "winner") color = "blue";
   
       console.log(
         `%c${player.name} | HP: ${player.hp} | Mana: ${player.mana} | Dégâts: ${player.dmg} | Status: ${player.status}`,
