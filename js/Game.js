@@ -6,7 +6,7 @@ class Game {
 
   // Démarrer le jeu
   startGame() {
-    console.log("La partie commence !");
+    console.log("%c La partie commence !", "color: orange; font-weight: bold;");
     while (this.turnLeft > 0 && this.getAlivePlayers().length > 1) {
       this.startTurn();
     }
@@ -15,6 +15,7 @@ class Game {
 
   // Démarrer un tour
   startTurn() {
+    console.log("%c---------------------", "color: green;");
     console.log(`\n--- Tour ${11 - this.turnLeft} ---`);
     const alivePlayers = this.getAlivePlayers();
     
@@ -76,13 +77,19 @@ class Game {
 
   // Affichage des statistiques des joueurs
   watchStats() {
-    console.log("\n--- Statistiques des joueurs ---");
+    console.log("\n%c--- Statistiques des joueurs ---", "color: blue; font-size: 14px;");
     this.players.forEach(player => {
+      let color = "white"; 
+      if (player.status === "loser") color = "red";
+      else if (player.status === "winner") color = "green";
+  
       console.log(
-        `${player.name} | HP: ${player.hp} | Mana: ${player.mana} | Dégâts: ${player.dmg} | Status: ${player.status}`
+        `%c${player.name} | HP: ${player.hp} | Mana: ${player.mana} | Dégâts: ${player.dmg} | Status: ${player.status}`,
+        `color: ${color}`
       );
     });
   }
+  
 
   // Mélanger un tableau (ordre aléatoire des joueurs)
   shuffleArray(array) {
