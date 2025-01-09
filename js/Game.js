@@ -13,8 +13,6 @@ class Game {
     this.endGame();
   }
 
-  //
-
   // Démarrer un tour
   startTurn() {
     console.log(`\n--- Tour ${11 - this.turnLeft} ---`);
@@ -25,11 +23,11 @@ class Game {
 
     // Chaque joueur joue son tour
     alivePlayers.forEach(player => {
-    if (player.status === "playing") {
-      console.log(`C'est au tour de ${player.name} de jouer.`);
-      const target = this.chooseTarget(player);
-      player.dealDamage(target);
-    }
+      if (player.status === "playing") {
+        console.log(`C'est au tour de ${player.name} de jouer.`);
+        const target = this.chooseTarget(player);
+        player.dealDamage(target);
+      }
     });
 
     this.skipTurn();
@@ -42,18 +40,28 @@ class Game {
     console.log(`Fin du tour. Tours restants : ${this.turnLeft}`);
   }
 
-  // Choisir une cible aléatoire (hors soi-même et joueurs éliminés)
+  // Choisir une cible avec IA basique
   chooseTarget(attacker) {
     const possibleTargets = this.getAlivePlayers().filter(player => player !== attacker);
+    
+    // IA : essayer un coup fatal si possible
+    for (const target of possibleTargets) {
+      if (target.hp <= attacker.dmg) {
+        console.log(`${attacker.name} tente un coup fatal sur ${target.name} !`);
+        return target;
+      }
+    }
+
+    // Sinon, cibler un joueur aléatoire
     return possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
   }
 
-  // Obtenir les joueurs en vie
+  // Obtenir les joueurs encore en vie
   getAlivePlayers() {
     return this.players.filter(player => player.status === "playing");
   }
 
-  // Fin de partie
+  // Fin de la partie
   endGame() {
     const winners = this.getAlivePlayers();
     if (winners.length === 1) {
@@ -62,19 +70,21 @@ class Game {
     } else {
       console.log("Fin des 10 tours ! Les survivants sont :");
       winners.forEach(player => player.status = "winner");
-    this.watchStats();
+      this.watchStats();
     }
   }
 
-  // Statistiques des joueurs
+  // Affichage des statistiques des joueurs
   watchStats() {
     console.log("\n--- Statistiques des joueurs ---");
     this.players.forEach(player => {
-    console.log(`${player.name} | HP: ${player.hp} | Mana: ${player.mana} | Dégâts: ${player.dmg} | Status: ${player.status}`);
+      console.log(
+        `${player.name} | HP: ${player.hp} | Mana: ${player.mana} | Dégâts: ${player.dmg} | Status: ${player.status}`
+      );
     });
   }
 
-  // Fonction utilitaire pour mélanger un tableau (ordre aléatoire)
+  // Mélanger un tableau (ordre aléatoire des joueurs)
   shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -82,3 +92,4 @@ class Game {
     }
   }
 }
+
